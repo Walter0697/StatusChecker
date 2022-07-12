@@ -9,32 +9,36 @@ export default defineEventHandler(async (event) => {
         }
     }
 
-    const body = await useBody(event)
-    let requiring = []
-    if (!body.label) {
-        requiring.push('label')
-    }
-    if (!body.checkURL) {
-        requiring.push('check URL')
-    }
-    if (!body.checkType) {
-        requiring.push('check type')
-    }
-    if (!body.groupId) {
-        requiring.push('group')
-    }
-
-    if (requiring.length !== 0) {
+    const id = parseInt(event.context.params.id)
+    if (!id) {
         event.res.statusCode = 400
         return {
-            message: 'the following data is required: ' + requiring.join(','),
+            message: 'id should be an int'
         }
     }
 
-    const statusResult = await statuscheck(body.checkURL, body.checkType, body.checkObject, body.checkKey)
+    const body = await useBody(event)
 
     try {
-        const newWebsite = await prisma.website.create({
+        const existingWebsite = await prisma.group.findFirst({
+            where: {
+                id: id,
+            }
+        })
+    
+        if (!existingWebsite) {
+            event.res.statusCode = 404
+            return {
+                message: 'cannot find group'
+            }
+        }
+
+        const statusResult = await statuscheck(body.checkURL, body.checkType, body.checkObject, body.checkKey)
+    
+        const updatedWebsite = await prisma.website.update({
+            where: {
+                id: id,
+            }, 
             data: {
                 label: body.label,
                 checkURL: body.checkURL,
@@ -47,7 +51,8 @@ export default defineEventHandler(async (event) => {
                 respondCode: statusResult.respondCode.toString(),
                 respondMessage: statusResult.respondMessage,
                 enabled: body.enabled,
-                createdBy: event.context.auth.id,
+                updatedBy: event.context.auth.id,
+                updatedAt: new Date(),
             }
         })
 

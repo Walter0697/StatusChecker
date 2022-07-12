@@ -261,16 +261,28 @@
                         this.error.groupId = 'group is missing'
                     }
 
-                    console.log('error')
-
                     if (hasError) {
                         return
                     }
 
-                    console.log('here')
-
                     if (this.id) {
+                        // if id has value, then it is updating
+                        const result = await $fetch (`/api/website/${this.id}`, {
+                            method: 'PATCH',
+                            body: {
+                                label: this.label,
+                                checkURL: this.checkURL,
+                                checkObject: this.checkObject,
+                                checkType: this.checkType,
+                                checkKey: this.checkKey,
+                                groupId: this.groupId,
+                                enabled: this.enabled,
+                            },
+                            headers: useRequestHeaders(['cookie'])
+                        })
 
+                        window.location.reload(true)
+                        return
                     } else {
                         const result = await $fetch('/api/website', {
                             method: 'POST',

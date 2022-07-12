@@ -21,18 +21,18 @@
 
         <div v-for="(website_item, index) in websiteList" v-bind:key="index" class="flex justify-center">
             <div class="alert shadow-lg mb-3 w-11/12" v-bind:style="'background-color: ' + getColorFromGroupId(website_item.groupId)">
-                <div class="flex justify-between w-full grid grid-cols-3 gap-2">
-                    <div>{{ website_item.label }}</div>
+                <div class="flex justify-between w-full grid grid-cols-2 gap-2">
+                    <div>{{ website_item.label }} <span v-if="!website_item.enabled">(Inactive)</span></div>
                     <div>{{ website_item.checkURL }}</div>
                     <div>{{ getDescription(website_item) }}</div>
                     <div class="self-end">
                         <label for="website-modal" class="btn btn-primary btn-sm mr-3 modal-button" @click="editForm(website_item)">Update</label>
-                        <label class="btn btn-secondary btn-sm" @click="deleteForm(website_item)">Delete</label>
+                        <label class="btn btn-secondary btn-sm" @click="deleteForm(websiteitem)">Delete</label>
                     </div>
                 </div>
             </div>
         </div>
-        <FormWebsite v-bind:currentEdit="editingWesbite" v-bind:groupList="groupList" />
+        <FormWebsite v-bind:currentEdit="editingWebsite" v-bind:groupList="groupList" />
     </div>
 </template>
 
@@ -53,6 +53,10 @@
             getDescription(item) {
                 if (item.checkType === 'startwith') {
                     return 'Starts With ' + item.checkObject
+                } else if (item.checkType === 'equalexact') {
+                    return 'Equals to ' + item.checkObject
+                } else {
+                    return 'Request Success'
                 }
             },
             openForm() {
@@ -62,21 +66,15 @@
                 this.editingWebsite = item
             },
             async deleteForm(item) {
-                
+                if (!(confirm('Are you sure you want to delete ' + item.label))) return
+
+                const result = await $fetch( `/api/website/${item.id}`, {
+                    method: 'DELETE',
+                    headers: useRequestHeaders(['cookie']),
+                })
+
+                window.location.reload(true)
             },
-            // editForm(item) {
-            //     this.editingGroup = item
-            // },
-            // async deleteForm(item) {
-            //     if (!(confirm('Are you sure you want to delete ' + item.label))) return
-
-            //     const result = await $fetch( `/api/group/${item.id}`, {
-            //         method: 'DELETE',
-            //         headers: useRequestHeaders(['cookie']),
-            //     })
-
-            //     window.location.reload(true)
-            // },
             async fetchGroupData() {
                 const result = await $fetch( '/api/groups', {
                     method: 'GET',
@@ -94,10 +92,6 @@
                 })
 
                 this.websiteList = result.websites
-
-                // this.groupList = result.groups.sort((a, b) => {
-                //     return a.displayOrder - b.displayOrder
-                // })
             }
         },
         beforeMount() {
