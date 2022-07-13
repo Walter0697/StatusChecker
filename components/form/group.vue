@@ -1,5 +1,5 @@
 <template>
-    <form v-on:submit="submitHandler">
+    <form @submit.prevent="">
         <input type="checkbox" id="group-modal" class="modal-toggle" />
         <label for="group-modal" class="modal cursor-pointer">
             <label class="modal-box relative" for="">
@@ -48,7 +48,7 @@
 
                 <!-- model action -->
                 <div class="modal-action">
-                    <button class="btn btn-active btn-primary" type="submit">Save</button>
+                    <button class="btn btn-active btn-primary" @click="submitHandler()">Save</button>
                     <label for="group-modal" class="btn btn-active">Close</label>
                 </div>
             </label>

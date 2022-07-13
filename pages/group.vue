@@ -21,7 +21,7 @@
 
         <div v-for="(group_item, index) in groupList" v-bind:key="index" class="flex justify-center">
             <div class="alert shadow-lg mb-3 w-11/12" v-bind:style="'background-color: ' + group_item.color">
-                <div class="flex justify-between w-full grid grid-cols-3 gap-2">
+                <div class="flex justify-between w-full grid grid-cols-3 gap-2 text-black">
                     <div>{{ group_item.label }}</div>
                     <div>{{ group_item.displayOrder }}</div>
                     <div class="self-end">

@@ -17,8 +17,6 @@ export default defineEventHandler(async (event) => {
         }
     }
 
-    const body = await useBody(event)
-
     try {
         const existingWebsite = await prisma.website.findFirst({
             where: {
@@ -29,35 +27,26 @@ export default defineEventHandler(async (event) => {
         if (!existingWebsite) {
             event.res.statusCode = 404
             return {
-                message: 'cannot find website'
+                message: 'cannot find group'
             }
         }
 
-        const statusResult = await statuscheck(body.checkURL, body.checkType, body.checkObject, body.checkKey)
+        const statusResult = await statuscheck(existingWebsite.checkURL, existingWebsite.checkType, existingWebsite.checkObject, existingWebsite.checkKey)
     
         const updatedWebsite = await prisma.website.update({
             where: {
                 id: id,
             }, 
             data: {
-                label: body.label,
-                checkURL: body.checkURL,
-                checkKey: body.checkKey,
-                checkObject: body.checkObject,
-                checkType: body.checkType,
-                groupId: body.groupId,
                 success: statusResult.success,
                 lastCheckTime: new Date(),
                 respondCode: statusResult.respondCode.toString(),
                 respondMessage: statusResult.respondMessage,
-                enabled: body.enabled,
-                updatedBy: event.context.auth.id,
-                updatedAt: new Date(),
             }
         })
 
         return {
-            message: 'ok'
+            updated: updatedWebsite,
         }
     } catch (e) {
         event.res.statusCode = 500

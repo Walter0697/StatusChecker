@@ -21,7 +21,7 @@
 
         <div v-for="(website_item, index) in websiteList" v-bind:key="index" class="flex justify-center">
             <div class="alert shadow-lg mb-3 w-11/12" v-bind:style="'background-color: ' + getColorFromGroupId(website_item.groupId)">
-                <div class="flex justify-between w-full grid grid-cols-2 gap-2">
+                <div class="flex justify-between w-full grid grid-cols-2 gap-2 text-black">
                     <div>{{ website_item.label }} <span v-if="!website_item.enabled">(Inactive)</span></div>
                     <div>{{ website_item.checkURL }}</div>
                     <div>{{ getDescription(website_item) }}</div>

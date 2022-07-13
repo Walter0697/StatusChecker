@@ -7,13 +7,16 @@ const statuscheck = async (url, checkType, checkObject, checkKey) => {
         const result = await $fetch(url)
         respondCode = 200
         respondMessage = result
-
         let checkTarget = result
         if (checkKey) {
-            const jsonContent = JSON.parse(checkTarget)
-            checkTarget = jsonContent[checkKey]
-        }
+            try {
+                const jsonContent = JSON.parse(checkTarget)
+                checkTarget = jsonContent
+            } catch (e) {
 
+            }
+            checkTarget = checkTarget[checkKey]
+        }
         switch (checkType) {
             case 'startwith': {
                 if (checkTarget.startsWith(checkObject)) {
@@ -40,6 +43,13 @@ const statuscheck = async (url, checkType, checkObject, checkKey) => {
         success = false
         respondCode = 500
         respondMessage = e.message
+    }
+
+    try {
+        const stringifyMsg = JSON.stringify(respondMessage)
+        respondMessage = stringifyMsg
+    } catch (e) {
+
     }
 
     return {

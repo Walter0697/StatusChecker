@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
 
     // one day expiration
     const token = jwt.sign({
-        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24),
+        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 30),
         data: {
             username: existing.username,
             id: existing.id,
