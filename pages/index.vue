@@ -87,7 +87,22 @@
             password: e.message
           }
         }
+      },
+      async checkLogin() {
+        try {
+          const result = await $fetch( '/api/me', {
+            method: 'GET',
+            headers: useRequestHeaders(['cookie']),
+          })
+
+          navigateTo({ path: '/dashboard' })
+        } catch (e) {
+
+        }
       }
+    },
+    beforeMount() {
+      this.checkLogin()
     }
   }
 
