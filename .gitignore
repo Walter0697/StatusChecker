@@ -8,3 +8,4 @@ node_modules
 dist
 lib/constant.ts
 schema.prisma
+yarn.lock

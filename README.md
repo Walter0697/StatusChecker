@@ -1,42 +1,10 @@
-# Nuxt 3 Minimal Starter
+# Status Checker
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+Using Nuxt3 to develop a simple status checker web app
 
+- the framework is still in development and I believe this is not a best practice to use it. If there are anything changed, I will modify this web app to make it better
 ## Setup
 
-Make sure to install the dependencies:
-
-```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
-pnpm install --shamefully-hoist
-```
-
-## Development Server
-
-Start the development server on http://localhost:3000
-
-```bash
-npm run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Checkout the [deployment documentation](https://v3.nuxtjs.org/guide/deploy/presets) for more information.
+- to build the image at Apple Chip, use the command `docker buildx build --platform linux/amd64 -t <imagename>:<tagname> .`
+- to apply the migration, enter the docker container, and `npx prisma migrate deploy`
+- to create a new user, enter the docker container, and `node inituser.ts <username> <password>`
