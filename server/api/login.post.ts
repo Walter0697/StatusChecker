@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import bcryptjs from 'bcryptjs'
 import prisma from '~~/lib/prisma'
+import constants from '~~/lib/constant'
 
 export default defineEventHandler(async (event) => {
     const body = await useBody(event)
@@ -33,7 +34,7 @@ export default defineEventHandler(async (event) => {
             username: existing.username,
             id: existing.id,
         }
-    }, process.env.JWT_SECRET)
+    }, constants.jwtSecret)
 
     return {
         token,

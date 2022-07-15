@@ -1,0 +1,51 @@
+datasource db {
+  url      = "postgresql://username:password@localhost:5432/statuschecker?schema=public"
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+model user {
+  id              Int      @id @default(autoincrement())
+  username        String
+  password        String
+  createdAt       DateTime @default(now())
+  deletedAt       DateTime?
+}
+
+model group {
+  id              Int      @id @default(autoincrement())
+  label           String
+  displayOrder    Int
+  color           String
+  createdAt       DateTime @default(now())
+  createdBy       Int
+  updatedAt       DateTime?
+  updatedBy       Int?
+  deletedAt       DateTime?
+  deletedBy       Int?
+}
+
+model website {
+  id              Int      @id @default(autoincrement())
+  label           String
+  groupId         Int
+  checkURL        String
+  checkObject     String
+  checkType       String
+  checkKey        String
+  success         Boolean
+  lastCheckTime   DateTime?
+  respondCode     String?
+  respondMessage  String?
+  enabled         Boolean
+  createdAt       DateTime @default(now())
+  createdBy       Int
+  updatedAt       DateTime?
+  updatedBy       Int?
+  deletedAt       DateTime?
+  deletedBy       Int?
+}
