@@ -111,8 +111,7 @@
             }
         },
         methods: {
-            async submitHandler(evt) {
-                evt.preventDefault()
+            async submitHandler() {
                 try {
                     let hasError = false
                     if (!this.label) {
